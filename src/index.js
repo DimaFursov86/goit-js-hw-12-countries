@@ -1,36 +1,39 @@
 import './sass/main.scss';
-
-import { alert, defoulModules } from '@pnotify/core';
-import * as PNotifyMobile from '@pnotify/mobile';
+import fetchCountries from './fetchCountries';
+import { error} from '@pnotify/core';
 import '@pnotify/core/dist/PNotify.css';
 import '@pnotify/core/dist/BrightTheme.css';
-import '@pnotify/mobile/dist/PNotifyMobile.css';
-// import { defaults } from 'gh-pages';
 
-// defoulModules.countriesHtml(PNotifyMobile, {});
 const refs = {
     input: document.querySelector('.js-input'),
     countriesList: document.querySelector('.js-list-contries')
 }
-console.log(refs.input)
-console.log(refs.countriesList)
 
-refs.input.addEventListener('input', fetchCountries);
+const debounce = require('lodash.debounce');
+refs.input.addEventListener('input', debounce(handleInput, 500));
 
-export default function fetchCountries(searchQuery) {
+function handleInput(e) {
     
-    const query = searchQuery.target.value;
-    if (query) {
-        fetch(`https://restcountries.eu/rest/v2/name/${query}?fullText=true`)
-            .then((response) => {
-                return response.json();
-            })
+   const searchQuery = e.target.value;
+
+   fetchCountries(searchQuery)
             .then((countries) => {
                 
                 const countriesHtml = countries.map((country) => `<li>${country.name}</li>`)
-                alert({ type: 'notice', text: 'Hello World' });
-                refs.countriesList.insertAdjacentHTML('afterbegin', countriesHtml);
+                
+                if (countriesHtml.length > 10) {
+                    error({delay: 1300, width: '310px', text: 'Too many matches found. Please enter more specific query!' });
+                    refs.countriesList.innerHTML = ``;
+                }
+                
+                else if (countriesHtml.length === 1) {
+                    console.log('Ok!')
+                }
+                else  {
+                     refs.countriesList.innerHTML = countriesHtml;
+                };
+
             })
-            .catch(console.log(error));
-    }
+            // .catch(refs.countriesList.innerHTML = `<li class="noMarker"><p>Wrong value</p></li>`);
+    
 }
