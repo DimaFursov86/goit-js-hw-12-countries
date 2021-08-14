@@ -19,7 +19,7 @@ refs.input.addEventListener('input', debounce(handleInput, 500));
 
 function handleInput(e) {
     
-   const searchQuery = e.target.value;
+   const searchQuery = e.target.value.trim() ;
 
    fetchCountries(searchQuery)
             .then((countries) => {
