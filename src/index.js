@@ -35,7 +35,7 @@ function handleInput(e) {
                         const markup = countryCardTpl(countries[0])
                         refs.countriesList.innerHTML = `<li class="noMarker">${markup}</li>`;
                     }
-                    else if (countriesHtml.length > 1 && countriesHtml.length < 10) {
+                    else if (countriesHtml.length > 1 && countriesHtml.length < 11) {
                         refs.countriesList.innerHTML = countriesHtml;
                     
                     };
