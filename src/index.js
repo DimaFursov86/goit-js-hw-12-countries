@@ -19,31 +19,28 @@ refs.input.addEventListener('input', debounce(handleInput, 500));
 
 function handleInput(e) {
     
-   const searchQuery = e.target.value.trim();
+   const searchQuery = e.target.value;
 
    fetchCountries(searchQuery)
             .then((countries) => {
                 
-                const countriesHtml = countries.map((country) => `<li class="cardList">${country.name}</li>`)
+                if (countries !== undefined) {
+                    const countriesHtml = countries.map((country) => `<li class="cardList">${country.name}</li>`)
                 
-                if (countriesHtml.length > 10) {
-                    error({delay: 1300, width: '310px', text: 'Too many matches found. Please enter more specific query!' });
-                    refs.countriesList.innerHTML = ``;
+                    if (countriesHtml.length > 10) {
+                        error({ delay: 1300, width: '310px', text: 'Too many matches found. Please enter more specific query!' });
+                        refs.countriesList.innerHTML = ``;                 
+                    }             
+                    else if (countriesHtml.length === 1) {
+                        const markup = countryCardTpl(countries[0])
+                        refs.countriesList.innerHTML = `<li class="noMarker">${markup}</li>`;
+                    }
+                    else if (countriesHtml.length > 1 && countriesHtml.length < 10) {
+                        refs.countriesList.innerHTML = countriesHtml;
                     
+                    };
                 }
-                
-                else if (countriesHtml.length === 1) {
-                    const markup = countryCardTpl(countries[0])
-                    refs.countriesList.innerHTML = `<li class="noMarker">${markup}</li>`;
-                }
-                else  {
-                    refs.countriesList.innerHTML = countriesHtml;
-                    
-                };
-
             })
-   
-            // .catch(refs.countriesList.innerHTML = `<li class="noMarker"><p>Wrong value</p></li>`);
-    
+                
 }
  
