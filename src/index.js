@@ -24,7 +24,7 @@ function handleInput(e) {
    fetchCountries(searchQuery)
             .then((countries) => {
                 
-                if (countries !== undefined) {
+                if (countries !== undefined && countries.status !== 404) {
                     const countriesHtml = countries.map((country) => `<li class="cardList">${country.name}</li>`)
                 
                     if (countriesHtml.length > 10) {

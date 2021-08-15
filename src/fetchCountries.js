@@ -9,6 +9,7 @@ export default function fetchCountries(searchQuery) {
         }).then(allCountries => {
             return allCountries
         }).catch(error => {
+            
         return
         })
         
